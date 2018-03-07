@@ -83,7 +83,7 @@ class FunctionTimer(object):
         Invoke the .timer member to get the total time and count
 
         eg:
-            @function_timer
+            @FunctionTimer
             def afunction(args):
                 # do some thing
 
