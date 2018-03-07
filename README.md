@@ -49,5 +49,5 @@ Invoke the .timer member to get the total time and count
 
     afunction.timer.reset()  # resets the timer to zero.
 
-
+Note: Feel free to suggest features/code or report bugs if any. I dont think I have tested it enough. I hope this can become a comprehensive module for developing fast computational projects.
 
