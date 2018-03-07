@@ -48,7 +48,7 @@ class Timer:
             self.unit = self.default_unit
         self.count = 0
         self.total = 0
-        self._start = 0
+        self.__start = 0
         self.is_running = False
         try:
             if not kwargs['wait']:
@@ -60,18 +60,18 @@ class Timer:
         if not self.is_running:
             self.count += 1
             self.is_running = True
-            self._start = clock()
+            self.__start = clock()
 
     def stop(self):
         if self.is_running:
-            self.total += clock() - self._start
+            self.total += clock() - self.__start
             self.is_running = False
 
     def reset(self):
         self.is_running = False
         self.count = 0
         self.total = 0
-        self._start = 0
+        self.__start = 0
 
     def __repr__(self):
         return str(round(self.total*UNITS[self.unit], 4)) + ' ' + self.unit
