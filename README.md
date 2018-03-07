@@ -2,6 +2,8 @@ A class to measure time elapsed and count number of passes through code segments
 using time.clock()
 Useful for benchmarking and code improvement.
 
+Run demo_timer.py to see usage and performance characteristics for various implementations of calculating factorial of a number.
+
 >>> t = Timer()  # starts the timer object
 ...
 >>> t.stop()  # stops the timer object
