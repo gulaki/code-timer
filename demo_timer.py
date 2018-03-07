@@ -1,4 +1,4 @@
-from code_timer import *
+from codetimer import *
 import math
 import numpy as np
 
