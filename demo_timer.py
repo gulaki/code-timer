@@ -57,19 +57,18 @@ print('Time using recursion =', t, '\t\t\t# worse than while')
 
 
 # Showing how to count passes and measure total time in loops or functions
-def facto(num, t):
-    t.start()  # start the waiting timer and count the iteration
+@FunctionTimer
+def facto(num):
     f = 1
     for i in range(1, num):
         f *= i
-    t.stop()  # stop the waiting timer till next start.
     return f
 
-t1 = Timer(wait=True)  # Initialize a timer but wait till start() is called
 t2 = Timer()
 for _ in range(rep):
-    f = facto(num, t1)  # passing timer to the function to measure internal times and counts
+    f = facto(num)  # passing timer to the function to measure internal times and counts
 t2.stop()
+t1 = facto.timer
 print('\nTotal time =', t1, 'in', t1.count, 'iterations.')
 print('Time per loop =', t1.total/t1.count, 's')
 print('Time taken outside the main loop = ', t2, '\t\t# some time is lost in func calls and returns.')

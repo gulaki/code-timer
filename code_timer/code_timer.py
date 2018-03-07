@@ -76,3 +76,30 @@ class Timer:
     def __repr__(self):
         return str(round(self.total*UNITS[self.unit], 4)) + ' ' + self.unit
 
+
+class FunctionTimer(object):
+    """
+        Use as a decorator to measure accumulated time of a function's execution.
+        Invoke the .timer member to get the total time and count
+
+        eg:
+            @function_timer
+            def afunction(args):
+                # do some thing
+
+            for i in range(1000):
+                afunction(args)
+
+            t = afunction.timer
+            print(t.total, t.count))
+    """
+    def __init__(self, f):
+        self.timer = Timer(wait=True)
+        self.f = f
+
+    def __call__(self, *args, **kwargs):
+        self.timer.start()
+        returns = self.f(*args, **kwargs)
+        self.timer.stop()
+        return returns
+
