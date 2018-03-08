@@ -1,0 +1,33 @@
+from codetimer import *
+from time import sleep
+from random import random
+import matplotlib.pyplot as plt
+
+waited, recorded = [], []
+
+
+@FunctionTimerStats
+def randwait(a, b):
+    a /= 1000
+    b /= 1000
+    wait = (b-a)*random()+a
+    waited.append(wait)  # store each random wait time in ms
+    sleep(wait)
+
+for i in range(100):
+    randwait(90, 100)  # random wait period range in milli seconds.
+    recorded.append(randwait.lap)  # store each recorded lap time
+
+t = randwait.timer
+t.final_stats()  # make calculations. Could've done randwait.timer.final_stats()
+
+plt.subplot(2, 2, 1)
+plt.plot(waited, recorded, '.')  # scatter plot of wait period vs. recorded period for each iteration.
+plt.subplot(2, 2, 3)
+plt.hist(waited, 50)  # histogram of wait periods
+plt.subplot(2, 2, 4)
+plt.hist(recorded, 50)  # histogram of recorded periods
+
+print(t)  # shows detailed results.
+plt.show()
+
