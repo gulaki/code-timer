@@ -49,15 +49,16 @@ def fact(num):
     else:
         return 1
 
-t = Timer()
-for _ in range(rep):
-    f = fact(num)
-t.stop()
+# using timer context manager
+with timercontext() as t:
+    for _ in range(rep):
+        f = fact(num)
 print('Time using recursion =', t, '\t\t\t# worse than while')
 
 
 # Showing how to count passes and measure total time in loops or functions
-@FunctionTimer
+# using decorator
+@functiontimer
 def facto(num):
     f = 1
     for i in range(1, num):
@@ -68,7 +69,7 @@ t2 = Timer()
 for _ in range(rep):
     f = facto(num)  # passing timer to the function to measure internal times and counts
 t2.stop()
-t1 = facto.timer
+t1 = facto.timer  # get the timer for the function
 print('\nTotal time =', t1, 'in', t1.count, 'iterations.')
 print('Time per loop =', t1.total/t1.count, 's')
 print('Time taken outside the main loop = ', t2, '\t\t# some time is lost in func calls and returns.')
