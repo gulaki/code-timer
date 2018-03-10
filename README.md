@@ -56,9 +56,9 @@ Invoke the *.timer* member to get the total time and count
 
 - *timercontext()* can be used as a context manager to time a chunk of code
 
-    with timercontext() as t:
-        # some process
-    print(t)
+      with timercontext() as t:
+          # some process
+      print(t)
 
 - *TimerStats()* extends Timer() by enabling simple statistical analysis on collected time data.
 
@@ -100,14 +100,14 @@ Run *test_stats.py* to see statistical analysis of time data from running a func
 
 - *MemoryTracker()* is a class to track the size of a number of objects as a function of time or iteration. 
 
-    data1, data2 = [], []
-    mem = MemoryTracker(data1, data2)  # initialize data tracker
-    for _ in range(1000):
-        # computations
-        data1.append(stuff)
-        data2.append(stuff)
-        mem.getsize(data1, data2)  # get size data at this point
+      data1, data2 = [], []
+      mem = MemoryTracker(data1, data2)  # initialize data tracker
+      for _ in range(1000):
+          # computations
+          data1.append(stuff)
+          data2.append(stuff)
+          mem.getsize(data1, data2)  # get size data at this point
 
-    plt.plot(mem.times, mem.sizes)  # plot to analyze space usage
+      plt.plot(mem.times, mem.sizes)  # plot to analyze space usage
 
 *Note: Feel free to suggest features/code or report bugs if any. I dont think I have tested it enough. I hope this can become a comprehensive module for developing fast computational projects.*
