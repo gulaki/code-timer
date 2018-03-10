@@ -9,7 +9,7 @@ with open('README.md', 'r') as f:
 
 
 setup(
-    name='code-timer',
+    name='codetimer',
     version='1.0.0',
     packages=['codetimer'],
     url='https://github.com/gulaki/code-timer',
