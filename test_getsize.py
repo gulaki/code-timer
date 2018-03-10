@@ -16,5 +16,7 @@ for i in range(10000):
 
 plt.subplot()
 plt.plot(mem.times, mem.sizes)
+plt.xlabel('Elapsed time')
+plt.ylabel('Memory consumption in %s' % mem.unit)
 plt.show()
 print('Test')
