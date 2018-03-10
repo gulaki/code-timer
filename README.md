@@ -38,10 +38,10 @@ By default the unit is 'ms' but in a project the default units can be set before
 
     >>> Timer.default_unit = 's'  # or any unit
 
-- *FunctionTimer()* can be used as a decorator to measure accumulated time of a function's execution.
+- *functiontimer()* can be used as a decorator to measure accumulated time of a function's execution.
 Invoke the *.timer* member to get the total time and count
 
-    @FunctionTimer
+    @functiontimer
     def afunction(args):
         # some process
 
@@ -53,6 +53,12 @@ Invoke the *.timer* member to get the total time and count
     print('Time per loop =', t.total/t.count)
 
     afunction.timer.reset()  # resets the timer to zero.
+
+- *timercontext()* can be used as a context manager to time a chunk of code
+
+    with timercontext() as t:
+        # some process
+    print(t)
 
 - *TimerStats()* extends Timer() by enabling simple statistical analysis on collected time data.
 
@@ -74,7 +80,7 @@ Invoke the *.timer* member to get the total time and count
 
 A call to *TimerStats.stop()* also returns the lap time. So if required it can be saved as lap data.
 
-- *FunctionTimerStats()* is similar to FunctionTimer decorator but enables statistical analysis on the timing data using TimerStats()
+- *functiontimerstats()* is similar to functiontimer decorator but enables statistical analysis on the timing data using TimerStats()
 
 eg:
     
@@ -91,5 +97,17 @@ eg:
     print(t)  # Formatted output giving detailed information
 
 Run *test_stats.py* to see statistical analysis of time data from running a function. Need Matplotlib to see the plots.
+
+- *MemoryTracker()* is a class to track the size of a number of objects as a function of time or iteration. 
+
+    data1, data2 = [], []
+    mem = MemoryTracker(data1, data2)  # initialize data tracker
+    for _ in range(1000):
+        # computations
+        data1.append(stuff)
+        data2.append(stuff)
+        mem.getsize(data1, data2)  # get size data at this point
+
+    plt.plot(mem.times, mem.sizes)  # plot to analyze space usage
 
 *Note: Feel free to suggest features/code or report bugs if any. I dont think I have tested it enough. I hope this can become a comprehensive module for developing fast computational projects.*
