@@ -9,12 +9,12 @@ with open('README.md', 'r') as f:
 
 
 setup(
-    name='code-timer',
-    version='1.0',
-    description='measure elapsed time and count pass in code paths',
-    long_description=long_description,
-    author='Anustuv Pal',
-    author_email='anustuv@gmail.com', 
+    name='codetimer',
+    version='1.0.0',
+    packages=['codetimer'],
     url='https://github.com/gulaki/code-timer',
-    packages=['code_timer']
+    license='MIT',
+    author='Anustuv',
+    author_email='anustuv@gmail.com',
+    description='A library of methods to time code paths and functions in a flexible way.'
 )
