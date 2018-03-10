@@ -41,18 +41,18 @@ By default the unit is 'ms' but in a project the default units can be set before
 - *functiontimer()* can be used as a decorator to measure accumulated time of a function's execution.
 Invoke the *.timer* member to get the total time and count
 
-    @functiontimer
-    def afunction(args):
-        # some process
+      @functiontimer
+      def afunction(args):
+          # some process
 
-    for i in range(1000):
-        afunction(args)
+      for i in range(1000):
+          afunction(args)
 
-    t = afunction.timer
-    print(t.total, t.count))
-    print('Time per loop =', t.total/t.count)
+      t = afunction.timer
+      print(t.total, t.count))
+      print('Time per loop =', t.total/t.count)
 
-    afunction.timer.reset()  # resets the timer to zero.
+      afunction.timer.reset()  # resets the timer to zero.
 
 - *timercontext()* can be used as a context manager to time a chunk of code
 
@@ -109,5 +109,7 @@ Run *test_stats.py* to see statistical analysis of time data from running a func
           mem.getsize(data1, data2)  # get size data at this point
 
       plt.plot(mem.times, mem.sizes)  # plot to analyze space usage
+
+Run *test_getsize.py* to see some trivial analysis.
 
 *Note: Feel free to suggest features/code or report bugs if any. I dont think I have tested it enough. I hope this can become a comprehensive module for developing fast computational projects.*
