@@ -50,7 +50,7 @@ def fact(num):
         return 1
 
 # using timer context manager
-with timercontext() as t:
+with Timer() as t:
     for _ in range(rep):
         f = fact(num)
 print('Time using recursion =', t, '\t\t\t# worse than while')
@@ -58,7 +58,7 @@ print('Time using recursion =', t, '\t\t\t# worse than while')
 
 # Showing how to count passes and measure total time in loops or functions
 # using decorator
-@functiontimer
+@Timer.function_timer
 def facto(num):
     f = 1
     for i in range(1, num):
