@@ -8,7 +8,6 @@ else:
 
 UNITS = {'s': 1, 'ms': 1000, 'm': 1/60, 'h': 1/3600}
 MUNITS = {'b': 1, 'kb': 1024, 'mb': 1024**2}
-STATES = {'simple': False, 'stats': True}
 
 
 class Timer(object):
@@ -186,13 +185,13 @@ class TimerStats(Timer):
         self.lap = 0
     
     @staticmethod
-    def function_timer_stats(func):
+    def function_timer(func):
         """
-            Timerstats.function_timer_stats is similar to Timer.function_timer decorator but enables 
+            Timerstats.function_timer is similar to Timer.function_timer decorator but enables 
             statistical analysis on the timing data using TimerStats()
 
             eg:
-                @Timerstats.function_timer_stats
+                @Timerstats.function_timer
                 def afunction(args):
                     # do something
                     return something

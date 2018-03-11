@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def test_stats():
     waited, recorded = [], []
 
-    @TimerStats.function_timer_stats
+    @TimerStats.function_timer
     def randwait(a, b):
         a /= 1000
         b /= 1000
