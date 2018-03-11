@@ -1,4 +1,4 @@
-from .codetimer import Timer, timercontext, functiontimer, TimerStats, functiontimerstats, MemoryTracker
+from codetimer import *
 
 __author__ = 'Anustuv Pal'
 __email__ = 'anustuv@gmail.com'

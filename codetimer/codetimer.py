@@ -7,7 +7,7 @@ else:
     timer_func = time
 
 UNITS = {'s': 1, 'ms': 1000, 'm': 1/60, 'h': 1/3600}
-STATES = {'simple': False, 'stats': True}
+MUNITS = {'b': 1, 'kb': 1024, 'mb': 1024**2}
 
 
 class Timer(object):
@@ -83,52 +83,44 @@ class Timer(object):
         self.total = 0
         self._start = 0
 
-    def __repr__(self):
-        fact = UNITS[self.unit]
-        return str(round(self.total*fact, 4)) + ' ' + self.unit
+    @staticmethod
+    def function_timer(func):
+        """
+        Use FunctionTimer as a decorator to measure accumulated time of a function's execution. Invoke the .timer member to get the total time and count
 
+        eg:
+            @Timer.function_timer
+            def afunction(args):
+                # do some thing
 
-class timercontext(object):
-    """
-    Timing under a context manager.
-    """
-    def __init__(self):
-        self.timer = Timer(wait=True)
+            for i in range(1000):
+                afunction(args)
+
+            t = afunction.timer
+            print(t.total, t.count)
+        """
+        timer = Timer(wait=True)
+
+        def wrapper(*args, **kwargs):
+            try:
+                timer.start()
+                return func(*args, **kwargs)
+            finally:
+                timer.stop()
+        wrapper.timer = timer
+        return wrapper
 
     def __enter__(self):
-        self.timer.start()
-        return self.timer
+        self._timer = Timer(wait=True)
+        self._timer.start()
+        return self._timer
 
     def __exit__(self, *args):
-        self.timer.stop()
+        self._timer.stop()
+        del self._timer
 
-
-def functiontimer(func):
-    """
-    Use FunctionTimer as a decorator to measure accumulated time of a function's execution. Invoke the .timer member to get the total time and count
-
-    eg:
-        @FunctionTimer
-        def afunction(args):
-            # do some thing
-
-        for i in range(1000):
-            afunction(args)
-
-        t = afunction.timer
-        print(t.total, t.count)
-    """
-    timer = Timer(wait=True)
-
-    def wrapper(*args, **kwargs):
-        try:
-            timer.start()
-            return func(*args, **kwargs)
-        finally:
-            timer.stop()
-    wrapper.timer = timer
-    return wrapper
-
+    def __repr__(self):
+        return str(round(self.total*UNITS[self.unit], 4)) + ' ' + self.unit
 
 class TimerStats(Timer):
     """
@@ -161,14 +153,6 @@ class TimerStats(Timer):
         self.lap = 0
         Timer.__init__(self, wait=True, unit=unit or self.default_unit)
 
-    def start(self):
-        if not self.is_running:
-            self.count += 1
-            self.is_running = True
-            self._start = timer_func()
-        else:
-            raise RuntimeWarning('Timer already running.')
-
     def stop(self):
         if self.is_running:
             self.lap = timer_func() - self._start
@@ -199,62 +183,60 @@ class TimerStats(Timer):
         self.min = 0
         self.max = 0
         self.lap = 0
+    
+    @staticmethod
+    def function_timer(func):
+        """
+            Timerstats.function_timer is similar to Timer.function_timer decorator but enables 
+            statistical analysis on the timing data using TimerStats()
 
-    def __repr__(self):
-        return str(round(self.total*UNITS[self.unit], 4)) + ' ' + self.unit
+            eg:
+                @Timerstats.function_timer
+                def afunction(args):
+                    # do something
+                    return something
+
+                for i in range(1000):
+                    retval = afunction(args)
+                    lap = afunction.lap  # Each lap time can be caught for further analysis
+
+                t = afunction.final_stats()  # calculates mean and std and can be accessed from the members.
+                print(t)  # Formatted output giving detailed information
+        """
+        timer = TimerStats()
+
+        def wrapper(*args, **kwargs):
+            try:
+                timer.start()
+                return func(*args, **kwargs)
+            finally:
+                timer.stop()
+        wrapper.timer = timer
+        return wrapper
 
     def __str__(self):
+        template = 'iters={cnt}: total={tot:.4f} {unit}, minm={min:.4f} ' \
+                   '{unit}, maxm={max:.4f} {unit},  mean={mean:.4f} {unit}, ' \
+                   'std={std:.4f} {unit}.'
         fact = UNITS[self.unit]
-        tot = self.total*fact
-        minm = self.min*fact
-        maxm = self.max*fact
-        mean = self.mean*fact
-        std = self.std*fact
-        fstr = 'iters={cnt}: total={tot:.4f} {unit}, minm={min:.4f} {unit}, maxm={max:.4f} {unit}, ' \
-               'mean={mean:.4f} {unit}, std={std:.4f} {unit}.'.format(cnt=self.count, unit=self.unit, tot=tot,
-                                                                      min=minm, max=maxm, mean=mean, std=std)
-        return fstr
-
-
-def functiontimerstats(func):
-    """
-        FunctionTimerStats is similar to FunctionTimer decorator but enables statistical analysis on the timing data using TimerStats()
-
-        eg:
-            @FunctionTimerStats
-            def afunction(args):
-                # do something
-                return something
-
-            for i in range(1000):
-                retval = afunction(args)
-                lap = afunction.lap  # Each lap time can be caught for further analysis
-
-            t = afunction.final_stats()  # calculates mean and std and can be accessed from the members.
-            print(t)  # Formatted output giving detailed information
-    """
-    timer = TimerStats()
-
-    def wrapper(*args, **kwargs):
-        try:
-            timer.start()
-            return func(*args, **kwargs)
-        finally:
-            timer.stop()
-    wrapper.timer = timer
-    return wrapper
-
-MUNITS = {'b': 1, 'kb': 1024, 'mb': 1024**2}
+        return template.format(
+            cnt=self.count,
+            unit=self.unit, 
+            tot=self.total*fact,
+            min=self.min*fact, 
+            max=self.max*fact, 
+            mean=self.mean*fact, 
+            std=self.std*fact
+        )
 
 
 class MemoryTracker(object):
     default_unit = 'kb'
 
     def __init__(self, *args):
+        print(globals())
         self.unit = self.default_unit
-        self.sizes = []
-        self.totals = []
-        self.times = []
+        self.sizes, self.totals, self.times = [], [], []
         self.getsize(*args)
 
     def getsize(self, *args):
@@ -265,7 +247,3 @@ class MemoryTracker(object):
 
     def normalize_time(self):
         self.times = [times - self.times[0] for times in self.times]
-
-
-
-

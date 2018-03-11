@@ -38,10 +38,10 @@ By default the unit is 'ms' but in a project the default units can be set before
 
     >>> Timer.default_unit = 's'  # or any unit
 
-- *functiontimer()* can be used as a decorator to measure accumulated time of a function's execution.
+- *Timer.function_timer()* can be used as a decorator to measure accumulated time of a function's execution.
 Invoke the *.timer* member to get the total time and count
 
-      @functiontimer
+      @Timer.function_timer
       def afunction(args):
           # some process
 
@@ -54,9 +54,9 @@ Invoke the *.timer* member to get the total time and count
 
       afunction.timer.reset()  # resets the timer to zero.
 
-- *timercontext()* can be used as a context manager to time a chunk of code
+- *TimerStats.function_timer()* can be used as a context manager to time a chunk of code
 
-      with timercontext() as t:
+      with TimerStats.function_timer as t:
           # some process
       print(t)
 
@@ -80,11 +80,11 @@ Invoke the *.timer* member to get the total time and count
 
 A call to *TimerStats.stop()* also returns the lap time. So if required it can be saved as lap data.
 
-- *functiontimerstats()* is similar to functiontimer decorator but enables statistical analysis on the timing data using TimerStats()
+- *TimerStats.function_timer()* is similar to function_timer decorator but enables statistical analysis on the timing data using TimerStats()
 
 eg:
     
-    @FunctionTimerStats
+    @TimerStats.function_timer
     def afunction(args):
         # do something
         return something
