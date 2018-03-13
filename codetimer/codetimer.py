@@ -122,6 +122,7 @@ class Timer(object):
     def __repr__(self):
         return str(round(self.total*UNITS[self.unit], 4)) + ' ' + self.unit
 
+
 class TimerStats(Timer):
     """
     TimerStats() extends Timer() by enabling simple statistical analysis on collected time data.
@@ -132,7 +133,6 @@ class TimerStats(Timer):
         ...     t.start()
         ...     ...
         ...     t.stop()
-        >>> t.final_stats()  # call this after measurement is done to calculate mean and standard deviation
         >>> t.min  # minimum lap time (s)
         >>> t.max  # maximum lap time (s)
         >>> t.total  # total time (s)
@@ -175,7 +175,10 @@ class TimerStats(Timer):
 
     @property
     def std(self):
-        return (self.total2 / (self.count-1) - self.mean ** 2) ** 0.5
+        try:
+            return (self.total2 / (self.count-1) - self.mean ** 2) ** 0.5
+        except ZeroDivisionError:
+            return (self.total2 / self.count - self.mean ** 2) ** 0.5
 
     def reset(self):
         super().reset()
